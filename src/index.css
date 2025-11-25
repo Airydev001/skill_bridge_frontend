@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4B5DFF;
+  --color-secondary: #956FFF;
+  --color-accent: #69F0AE;
+
+  --color-neutral-charcoal: #1A1A1D;
+  --color-neutral-softGray: #F4F5F7;
+  --color-neutral-white: #FFFFFF;
+
+  --font-sans: "DM Sans", "Inter", sans-serif;
+  --font-heading: "Poppins", "Inter", sans-serif;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+}
+
+@layer base {
+  body {
+    @apply bg-neutral-softGray text-neutral-charcoal font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+}
