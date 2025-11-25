@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import api from '../api/client';
-import { Calendar, Clock, Video, Star, Trophy, Award } from 'lucide-react';
+import { Calendar, Clock, Trophy, Award } from 'lucide-react';
 
 const DashboardPage = () => {
     const { user, logout } = useAuth();
