@@ -7,14 +7,16 @@ const LoginPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { login } = useAuth();
     const navigate = useNavigate();
-    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (data: any) => {
+        setIsLoading(true);
         try {
             await login(data);
             navigate('/dashboard');
         } catch (err: any) {
             setError(err.response?.data?.message || 'Login failed');
+            setIsLoading(false);
         }
     };
 
@@ -45,8 +47,17 @@ const LoginPage = () => {
                     <div className="flex justify-end">
                         <Link to="/forgot-password" className="text-sm text-primary hover:underline">Forgot Password?</Link>
                     </div>
-                    <button type="submit" className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition">
-                        Login
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+                    >
+                        {isLoading ? (
+                            <>
+                                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></span>
+                                Logging in...
+                            </>
+                        ) : 'Login'}
                     </button>
                 </form>
                 <p className="text-center mt-4 text-neutral-charcoal">

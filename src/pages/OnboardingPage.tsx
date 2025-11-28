@@ -11,8 +11,10 @@ const OnboardingPage = () => {
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
     const [availability, setAvailability] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (data: any) => {
+        setIsLoading(true);
         try {
             if (user?.role === 'mentor') {
                 const formattedData = {
@@ -35,6 +37,7 @@ const OnboardingPage = () => {
             navigate('/dashboard');
         } catch (error) {
             console.error('Onboarding failed', error);
+            setIsLoading(false);
         }
     };
 
@@ -90,8 +93,17 @@ const OnboardingPage = () => {
                             </div>
                         </>
                     )}
-                    <button type="submit" className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition shadow-lg mt-8">
-                        Complete Profile
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition shadow-lg mt-8 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+                    >
+                        {isLoading ? (
+                            <>
+                                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></span>
+                                Saving...
+                            </>
+                        ) : 'Complete Profile'}
                     </button>
                 </form>
             </div>

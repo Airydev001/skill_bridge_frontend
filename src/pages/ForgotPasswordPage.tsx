@@ -7,8 +7,10 @@ const ForgotPasswordPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const onSubmit = async (data: any) => {
+        setIsLoading(true);
         try {
             const res = await api.post('/auth/forgot-password', data);
             setMessage(res.data.message);
@@ -16,6 +18,8 @@ const ForgotPasswordPage = () => {
         } catch (err: any) {
             setError(err.response?.data?.message || 'Failed to send reset email');
             setMessage('');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -35,8 +39,17 @@ const ForgotPasswordPage = () => {
                         />
                         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message as string}</p>}
                     </div>
-                    <button type="submit" className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition">
-                        Send Reset Link
+                    <button
+                        type="submit"
+                        disabled={isLoading}
+                        className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
+                    >
+                        {isLoading ? (
+                            <>
+                                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></span>
+                                Sending...
+                            </>
+                        ) : 'Send Reset Link'}
                     </button>
                 </form>
                 <p className="text-center mt-4 text-neutral-charcoal">
