@@ -12,6 +12,7 @@ import SessionPage from './pages/SessionPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
@@ -27,12 +28,16 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
-      <Route path="/onboarding" element={<PrivateRoute><OnboardingPage /></PrivateRoute>} />
-      <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-      <Route path="/mentors" element={<PrivateRoute><MentorDiscoveryPage /></PrivateRoute>} />
-      <Route path="/book/:mentorId" element={<PrivateRoute><BookingPage /></PrivateRoute>} />
-      <Route path="/session/:roomId" element={<PrivateRoute><SessionPage /></PrivateRoute>} />
-      <Route path="/admin" element={<PrivateRoute><AdminDashboardPage /></PrivateRoute>} />
+
+      {/* Protected Routes with Layout */}
+      <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
+        <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/mentors" element={<MentorDiscoveryPage />} />
+        <Route path="/book/:mentorId" element={<BookingPage />} />
+        <Route path="/session/:roomId" element={<SessionPage />} />
+        <Route path="/admin" element={<AdminDashboardPage />} />
+      </Route>
     </Routes>
   );
 }

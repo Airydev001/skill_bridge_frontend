@@ -5,7 +5,7 @@ import api from '../api/client';
 import { Calendar, Clock, Trophy, Award } from 'lucide-react';
 
 const DashboardPage = () => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
 
     const { data: sessions, isLoading } = useQuery({
         queryKey: ['sessions'],
@@ -23,13 +23,7 @@ const DashboardPage = () => {
 
     return (
         <div className="min-h-screen bg-neutral-softGray">
-            <nav className="bg-white shadow-sm p-4 flex justify-between items-center">
-                <h1 className="text-2xl font-heading font-bold text-primary">SkillBridge</h1>
-                <div className="flex items-center gap-4">
-                    <span className="font-medium text-neutral-charcoal">Hello, {user?.name}</span>
-                    <button onClick={logout} className="text-red-500 font-medium hover:text-red-700">Logout</button>
-                </div>
-            </nav>
+            {/* Nav moved to Layout */}
 
             <main className="p-8 max-w-7xl mx-auto">
                 <h2 className="text-3xl font-heading font-bold text-neutral-charcoal mb-8">Dashboard</h2>
