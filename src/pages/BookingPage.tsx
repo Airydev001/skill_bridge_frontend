@@ -35,7 +35,12 @@ const BookingPage = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['sessions'] });
-            navigate('/dashboard');
+            // Use replace to prevent going back to the booking form easily
+            navigate('/dashboard', { replace: true });
+        },
+        onError: (error: any) => {
+            console.error('Booking failed:', error);
+            alert('Failed to book session. Please try again.');
         }
     });
 
