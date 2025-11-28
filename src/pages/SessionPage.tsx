@@ -63,7 +63,7 @@ const SessionPage = () => {
         if (!partnerId) return;
 
         // Use VITE_API_URL or default to localhost:4000 (backend port)
-        const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+        const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
         console.log("Connecting to socket at:", socketUrl);
         socketRef.current = io(socketUrl.replace('/api', '')); // Remove /api if present for socket root
 
