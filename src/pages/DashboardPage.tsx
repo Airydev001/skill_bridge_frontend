@@ -11,6 +11,7 @@ const DashboardPage = () => {
         queryKey: ['sessions'],
         queryFn: async () => {
             const res = await api.get('/sessions');
+            console.log('Raw sessions data:', res.data);
             return res.data;
         }
     });
@@ -131,6 +132,22 @@ const DashboardPage = () => {
                                 <Link to="/mentors" className="mt-4 inline-block text-primary font-medium hover:underline">Find a mentor</Link>
                             </div>
                         )}
+
+                        {/* Debug Section: Show All Sessions */}
+                        <div className="mt-8 pt-8 border-t">
+                            <h3 className="text-lg font-bold mb-4 text-gray-500">All Sessions (Debug)</h3>
+                            {sessions && sessions.length > 0 ? (
+                                <div className="space-y-2">
+                                    {sessions.map((session: any) => (
+                                        <div key={session._id} className="text-sm text-gray-600 border-b pb-2">
+                                            {new Date(session.startAt).toLocaleString()} - {session.status} - {session.agenda}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-sm text-gray-400">No sessions found in history.</p>
+                            )}
+                        </div>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm">
