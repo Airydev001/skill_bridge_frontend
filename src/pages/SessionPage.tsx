@@ -62,7 +62,10 @@ const SessionPage = () => {
     useEffect(() => {
         if (!partnerId) return;
 
-        socketRef.current = io('http://localhost:5000');
+        // Use VITE_API_URL or default to localhost:4000 (backend port)
+        const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+        console.log("Connecting to socket at:", socketUrl);
+        socketRef.current = io(socketUrl.replace('/api', '')); // Remove /api if present for socket root
 
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             .then((currentStream) => {
@@ -175,6 +178,7 @@ const SessionPage = () => {
     };
 
     const callUser = async () => {
+        console.log("Creating offer...");
         peerRef.current = createPeer();
         const offer = await peerRef.current.createOffer();
         await peerRef.current.setLocalDescription(offer);
@@ -182,6 +186,7 @@ const SessionPage = () => {
     };
 
     const handleReceiveOffer = async (payload: any) => {
+        console.log("Received offer, creating answer...");
         peerRef.current = createPeer();
         await peerRef.current.setRemoteDescription(payload.sdp);
         const answer = await peerRef.current.createAnswer();
@@ -195,12 +200,14 @@ const SessionPage = () => {
 
     const handleICECandidateEvent = (e: RTCPeerConnectionIceEvent) => {
         if (e.candidate && partnerId) {
+            console.log("Generated ICE candidate");
             socketRef.current?.emit('ice-candidate', { target: partnerId, candidate: e.candidate });
         }
     };
 
     const handleNewICECandidateMsg = (candidate: RTCIceCandidate) => {
-        peerRef.current?.addIceCandidate(candidate);
+        console.log("Received ICE candidate");
+        peerRef.current?.addIceCandidate(candidate).catch(e => console.error("Error adding ICE candidate:", e));
     };
 
     const handleTrackEvent = (e: RTCTrackEvent) => {
