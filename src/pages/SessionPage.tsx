@@ -275,9 +275,9 @@ const SessionPage = () => {
     };
 
     return (
-        <div className="flex h-screen bg-neutral-charcoal overflow-hidden">
+        <div className="flex flex-col md:flex-row h-screen bg-neutral-charcoal overflow-hidden relative">
             {/* Main Content */}
-            <div className={`flex-1 flex flex-col relative transition-all duration-300 ${showChat ? 'mr-0' : ''}`}>
+            <div className={`flex-1 flex flex-col relative transition-all duration-300 ${showChat ? 'md:mr-0' : ''}`}>
 
                 {/* Header / Timer */}
                 <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-white flex items-center gap-4 border border-white/10">
@@ -290,12 +290,12 @@ const SessionPage = () => {
                     <div className="w-px h-4 bg-white/20"></div>
                     <div className="flex items-center gap-2">
                         <div className={`w-2 h-2 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : connectionStatus === 'connecting' ? 'bg-yellow-500' : 'bg-red-500'}`} />
-                        <span className="text-xs font-medium uppercase tracking-wider opacity-80">{connectionStatus}</span>
+                        <span className="text-xs font-medium uppercase tracking-wider opacity-80 hidden sm:inline">{connectionStatus}</span>
                     </div>
                 </div>
 
                 {/* Video Area */}
-                <div className="flex-1 p-4 flex items-center justify-center relative">
+                <div className="flex-1 p-2 md:p-4 flex items-center justify-center relative">
                     <div className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
                         {/* Main Video (Remote or Local Screen) */}
                         <video
@@ -313,7 +313,7 @@ const SessionPage = () => {
                         )}
 
                         {/* PIP Video (Local Camera) */}
-                        <div className="absolute bottom-4 right-4 w-64 aspect-video bg-gray-800 rounded-xl overflow-hidden border-2 border-white/20 shadow-2xl transition-all hover:scale-105">
+                        <div className="absolute bottom-4 right-4 w-24 md:w-64 aspect-video bg-gray-800 rounded-lg md:rounded-xl overflow-hidden border-2 border-white/20 shadow-2xl transition-all hover:scale-105">
                             <video
                                 playsInline
                                 autoPlay
@@ -323,7 +323,7 @@ const SessionPage = () => {
                             />
                             {isVideoOff && (
                                 <div className="w-full h-full flex items-center justify-center bg-gray-800 text-white">
-                                    <CameraOff className="w-8 h-8 opacity-50" />
+                                    <CameraOff className="w-4 h-4 md:w-8 md:h-8 opacity-50" />
                                 </div>
                             )}
                         </div>
@@ -331,56 +331,65 @@ const SessionPage = () => {
                 </div>
 
                 {/* Controls Bar */}
-                <div className="h-20 bg-gray-900/90 backdrop-blur border-t border-white/10 flex items-center justify-center gap-4 px-8">
+                <div className="h-16 md:h-20 bg-gray-900/90 backdrop-blur border-t border-white/10 flex items-center justify-center gap-2 md:gap-4 px-4 md:px-8 overflow-x-auto">
                     <button
                         onClick={toggleAudio}
-                        className={`p-4 rounded-full transition-all ${isAudioMuted ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        className={`p-3 md:p-4 rounded-full transition-all ${isAudioMuted ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        {isAudioMuted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+                        {isAudioMuted ? <MicOff className="w-5 h-5 md:w-6 md:h-6" /> : <Mic className="w-5 h-5 md:w-6 md:h-6" />}
                     </button>
 
                     <button
                         onClick={toggleVideo}
-                        className={`p-4 rounded-full transition-all ${isVideoOff ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        className={`p-3 md:p-4 rounded-full transition-all ${isVideoOff ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        {isVideoOff ? <CameraOff className="w-6 h-6" /> : <Camera className="w-6 h-6" />}
+                        {isVideoOff ? <CameraOff className="w-5 h-5 md:w-6 md:h-6" /> : <Camera className="w-5 h-5 md:w-6 md:h-6" />}
                     </button>
 
                     <button
                         onClick={shareScreen}
-                        className={`p-4 rounded-full transition-all ${isScreenSharing ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        className={`p-3 md:p-4 rounded-full transition-all ${isScreenSharing ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        <Monitor className="w-6 h-6" />
+                        <Monitor className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
                     <button
                         onClick={() => setShowChat(!showChat)}
-                        className={`p-4 rounded-full transition-all ${showChat ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        className={`p-3 md:p-4 rounded-full transition-all ${showChat ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        <MessageSquare className="w-6 h-6" />
+                        <MessageSquare className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
-                    <div className="w-px h-10 bg-white/10 mx-2" />
+                    <div className="w-px h-8 md:h-10 bg-white/10 mx-1 md:mx-2" />
 
                     <button
                         onClick={endCall}
-                        className="bg-red-600 text-white px-8 py-3 rounded-full hover:bg-red-700 shadow-lg font-semibold flex items-center gap-2 transition-all hover:scale-105"
+                        className="bg-red-600 text-white px-4 md:px-8 py-2 md:py-3 rounded-full hover:bg-red-700 shadow-lg font-semibold flex items-center gap-2 transition-all hover:scale-105 text-sm md:text-base"
                     >
-                        <PhoneOff className="w-5 h-5" />
-                        End Call
+                        <PhoneOff className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="hidden md:inline">End Call</span>
+                        <span className="md:hidden">End</span>
                     </button>
                 </div>
             </div>
 
             {/* Chat Sidebar */}
             {showChat && (
-                <div className="w-80 h-full border-l border-white/10">
-                    <ChatSidebar
-                        socket={socketRef.current}
-                        roomId={roomId || ''}
-                        userId={user?._id || ''}
-                        userName={user?.name || 'User'}
-                    />
+                <div className="absolute inset-0 md:static md:w-80 h-full bg-neutral-charcoal z-50 md:z-auto border-l border-white/10 flex flex-col">
+                    <div className="md:hidden p-4 bg-gray-900 flex justify-between items-center border-b border-white/10">
+                        <h3 className="text-white font-bold">Chat</h3>
+                        <button onClick={() => setShowChat(false)} className="text-gray-400 hover:text-white">
+                            Close
+                        </button>
+                    </div>
+                    <div className="flex-1 overflow-hidden">
+                        <ChatSidebar
+                            socket={socketRef.current}
+                            roomId={roomId || ''}
+                            userId={user?._id || ''}
+                            userName={user?.name || 'User'}
+                        />
+                    </div>
                 </div>
             )}
         </div>
