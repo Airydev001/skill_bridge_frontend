@@ -8,6 +8,7 @@ const LoginPage = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const onSubmit = async (data: any) => {
         setIsLoading(true);
