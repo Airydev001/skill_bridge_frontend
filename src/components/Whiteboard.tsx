@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Socket } from 'socket.io-client';
-import { Eraser, Trash2, PenTool } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 interface WhiteboardProps {
     socket: Socket | null;
