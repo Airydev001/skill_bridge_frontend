@@ -8,7 +8,7 @@ import AvailabilitySelector from '../components/AvailabilitySelector';
 const EditProfilePage = () => {
     const { user, setUser } = useAuth();
     const navigate = useNavigate();
-    const { register, handleSubmit, setValue, reset } = useForm();
+    const { register, handleSubmit, setValue, } = useForm();
     const [isLoading, setIsLoading] = useState(false);
     const [availability, setAvailability] = useState<any[]>([]);
 
