@@ -26,8 +26,13 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ socket, roomId, userId, userN
             setMessages((prev) => [...prev, message]);
         });
 
+        socket.on('chat-history', (history: Message[]) => {
+            setMessages(history);
+        });
+
         return () => {
             socket.off('receive-message');
+            socket.off('chat-history');
         };
     }, [socket]);
 
@@ -59,8 +64,8 @@ const ChatSidebar: React.FC<ChatSidebarProps> = ({ socket, roomId, userId, userN
                 {messages.map((msg, idx) => (
                     <div key={idx} className={`flex flex-col ${msg.senderId === userId ? 'items-end' : 'items-start'}`}>
                         <div className={`max-w-[85%] rounded-lg p-3 ${msg.senderId === userId
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-700 text-gray-200'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-700 text-gray-200'
                             }`}>
                             <p className="text-sm font-bold mb-1 text-opacity-75">{msg.senderName}</p>
                             <p className="text-sm">{msg.message}</p>

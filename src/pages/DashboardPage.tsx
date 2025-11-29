@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
 import { Calendar, Clock, Trophy, Award } from 'lucide-react';
 
 const DashboardPage = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
 
     const { data: sessions, isLoading } = useQuery({
         queryKey: ['sessions'],
@@ -132,8 +133,6 @@ const DashboardPage = () => {
                                 <Link to="/mentors" className="mt-4 inline-block text-primary font-medium hover:underline">Find a mentor</Link>
                             </div>
                         )}
-
-
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm">
@@ -142,7 +141,10 @@ const DashboardPage = () => {
                             <Link to="/mentors" className="block w-full bg-primary text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90">
                                 Find a Mentor
                             </Link>
-                            <button className="block w-full border border-gray-300 text-gray-700 text-center py-3 rounded-xl font-bold hover:bg-gray-50">
+                            <button
+                                onClick={() => navigate('/profile/edit')}
+                                className="block w-full border border-gray-300 text-gray-700 text-center py-3 rounded-xl font-bold hover:bg-gray-50"
+                            >
                                 Edit Profile
                             </button>
                         </div>

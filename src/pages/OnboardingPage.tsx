@@ -30,7 +30,7 @@ const OnboardingPage = () => {
                     ...data,
                     interests: data.interests.split(',').map((s: string) => s.trim()),
                     learningGoals: data.learningGoals.split(',').map((s: string) => s.trim()),
-                    preferredTimes: [] // TODO: Implement complex time UI
+                    preferredTimes: []
                 };
                 await api.post('/users/mentee-profile', formattedData);
             }
