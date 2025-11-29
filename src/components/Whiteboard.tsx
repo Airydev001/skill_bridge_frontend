@@ -53,6 +53,9 @@ const Whiteboard = ({ socket, roomId }: WhiteboardProps) => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
+        // Request latest state
+        socket.emit('get-whiteboard', roomId);
+
         // Set canvas size
         const resizeCanvas = () => {
             const parent = canvas.parentElement;
@@ -66,7 +69,7 @@ const Whiteboard = ({ socket, roomId }: WhiteboardProps) => {
                 canvas.width = parent.clientWidth;
                 canvas.height = parent.clientHeight;
 
-                // Restore content (naive approach, better to redraw all strokes)
+                // Restore content
                 ctx.drawImage(tempCanvas, 0, 0);
             }
         };
@@ -94,7 +97,24 @@ const Whiteboard = ({ socket, roomId }: WhiteboardProps) => {
             socket.off('draw-stroke');
             socket.off('clear-board');
         };
-    }, [socket]);
+    }, [socket, roomId]);
+
+    const getCoordinates = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
+        let clientX, clientY;
+        if ('touches' in e) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = (e as React.MouseEvent).clientX;
+            clientY = (e as React.MouseEvent).clientY;
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        return {
+            offsetX: clientX - rect.left,
+            offsetY: clientY - rect.top
+        };
+    };
 
     const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
@@ -143,23 +163,6 @@ const Whiteboard = ({ socket, roomId }: WhiteboardProps) => {
             socket.emit('draw-stroke', { roomId, stroke });
         }
         setCurrentStroke([]);
-    };
-
-    const getCoordinates = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
-        let clientX, clientY;
-        if ('touches' in e) {
-            clientX = e.touches[0].clientX;
-            clientY = e.touches[0].clientY;
-        } else {
-            clientX = (e as React.MouseEvent).clientX;
-            clientY = (e as React.MouseEvent).clientY;
-        }
-
-        const rect = canvas.getBoundingClientRect();
-        return {
-            offsetX: clientX - rect.left,
-            offsetY: clientY - rect.top
-        };
     };
 
     const clearBoard = () => {
