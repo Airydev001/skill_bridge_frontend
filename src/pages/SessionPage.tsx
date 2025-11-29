@@ -3,8 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
-import { Mic, MicOff, Camera, CameraOff, Monitor, PhoneOff, MessageSquare, Clock } from 'lucide-react';
+import { Mic, MicOff, Camera, CameraOff, Monitor, PhoneOff, MessageSquare, Clock, PenTool, X } from 'lucide-react';
 import ChatSidebar from '../components/ChatSidebar';
+import Whiteboard from '../components/Whiteboard';
 
 const SessionPage = () => {
     const { roomId } = useParams();
@@ -32,6 +33,7 @@ const SessionPage = () => {
     const [isVideoOff, setIsVideoOff] = useState(false);
     const [isScreenSharing, setIsScreenSharing] = useState(false);
     const [showChat, setShowChat] = useState(true);
+    const [showWhiteboard, setShowWhiteboard] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
 
     // Timer State
@@ -337,6 +339,24 @@ const SessionPage = () => {
                     </div>
                 </div>
 
+                {/* Whiteboard Overlay */}
+                {showWhiteboard && (
+                    <div className="absolute inset-4 md:inset-8 z-20 bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+                        <div className="bg-gray-100 p-2 flex justify-between items-center border-b">
+                            <h3 className="font-bold text-gray-700 px-2">Shared Whiteboard</h3>
+                            <button
+                                onClick={() => setShowWhiteboard(false)}
+                                className="p-1 hover:bg-gray-200 rounded-full"
+                            >
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
+                        </div>
+                        <div className="flex-1 relative">
+                            <Whiteboard socket={socketRef.current} roomId={roomId || ''} />
+                        </div>
+                    </div>
+                )}
+
                 {/* Controls Bar */}
                 <div className="h-16 md:h-20 bg-gray-900/90 backdrop-blur border-t border-white/10 flex items-center justify-center gap-2 md:gap-4 px-4 md:px-8 overflow-x-auto">
                     <button
@@ -358,6 +378,13 @@ const SessionPage = () => {
                         className={`p-3 md:p-4 rounded-full transition-all ${isScreenSharing ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
                         <Monitor className="w-5 h-5 md:w-6 md:h-6" />
+                    </button>
+
+                    <button
+                        onClick={() => setShowWhiteboard(!showWhiteboard)}
+                        className={`p-3 md:p-4 rounded-full transition-all ${showWhiteboard ? 'bg-purple-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                    >
+                        <PenTool className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
                     <button
