@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
-import { Mic, MicOff, Camera, CameraOff, Monitor, PhoneOff, MessageSquare, Clock, PenTool, X } from 'lucide-react';
+import { Mic, MicOff, Camera, CameraOff, Monitor, PhoneOff, MessageSquare, Clock, PenTool, X, FileText } from 'lucide-react';
 import ChatSidebar from '../components/ChatSidebar';
 import Whiteboard from '../components/Whiteboard';
 
@@ -39,6 +39,34 @@ const SessionPage = () => {
     // Timer State
     const [timeLeft, setTimeLeft] = useState(20 * 60);
 
+    // Notes State
+    const [showNotes, setShowNotes] = useState(false);
+    const [notes, setNotes] = useState('');
+    const [isSavingNotes, setIsSavingNotes] = useState(false);
+
+    // Auto-save Notes
+    useEffect(() => {
+        const saveNotes = async () => {
+            if (!roomId) return;
+            setIsSavingNotes(true);
+            try {
+                await api.patch(`/sessions/${roomId}`, { notes });
+            } catch (err) {
+                console.error("Failed to save notes", err);
+            } finally {
+                setIsSavingNotes(false);
+            }
+        };
+
+        const timeoutId = setTimeout(() => {
+            if (notes) {
+                saveNotes();
+            }
+        }, 2000); // Auto-save after 2 seconds of inactivity
+
+        return () => clearTimeout(timeoutId);
+    }, [notes, roomId]);
+
     // Fetch Session
     useEffect(() => {
         const fetchSession = async () => {
@@ -49,6 +77,9 @@ const SessionPage = () => {
                     setPartnerId(session.menteeId._id);
                 } else {
                     setPartnerId(session.mentorId._id);
+                }
+                if (session.notes) {
+                    setNotes(session.notes);
                 }
             } catch (err) {
                 console.error("Failed to fetch session", err);
@@ -381,6 +412,13 @@ const SessionPage = () => {
                     </button>
 
                     <button
+                        onClick={() => setShowNotes(!showNotes)}
+                        className={`p-3 md:p-4 rounded-full transition-all ${showNotes ? 'bg-yellow-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                    >
+                        <FileText className="w-5 h-5 md:w-6 md:h-6" />
+                    </button>
+
+                    <button
                         onClick={() => setShowWhiteboard(!showWhiteboard)}
                         className={`p-3 md:p-4 rounded-full transition-all ${showWhiteboard ? 'bg-purple-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
@@ -424,6 +462,30 @@ const SessionPage = () => {
                             userName={user?.name || 'User'}
                         />
                     </div>
+                </div>
+            )}
+
+            {/* Notes Panel */}
+            {showNotes && (
+                <div className="absolute top-20 right-4 w-80 bg-white rounded-xl shadow-2xl z-50 overflow-hidden flex flex-col border border-gray-200 animate-in slide-in-from-right-10 duration-200">
+                    <div className="bg-yellow-50 p-3 flex justify-between items-center border-b border-yellow-100">
+                        <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4 text-yellow-600" />
+                            <h3 className="font-bold text-gray-700">Session Notes</h3>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            {isSavingNotes && <span className="text-xs text-gray-400 animate-pulse">Saving...</span>}
+                            <button onClick={() => setShowNotes(false)} className="text-gray-400 hover:text-gray-600">
+                                <X className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+                    <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="Type your notes here... (Auto-saved)"
+                        className="w-full h-64 p-4 resize-none focus:outline-none text-gray-700 text-sm"
+                    />
                 </div>
             )}
 
