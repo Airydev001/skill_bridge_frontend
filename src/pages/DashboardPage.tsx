@@ -135,6 +135,47 @@ const DashboardPage = () => {
                         )}
                     </div>
 
+                    <div className="bg-white p-6 rounded-2xl shadow-sm md:col-span-2">
+                        <h3 className="text-xl font-bold mb-4">Past Sessions</h3>
+                        {sessions?.filter((s: any) => s.status === 'completed').length > 0 ? (
+                            <div className="space-y-4">
+                                {sessions.filter((s: any) => s.status === 'completed').map((session: any) => (
+                                    <div key={session._id} className="border p-4 rounded-xl">
+                                        <div className="flex justify-between items-start mb-2">
+                                            <div>
+                                                <p className="font-bold text-lg">{session.agenda}</p>
+                                                <p className="text-gray-500 text-sm">
+                                                    {new Date(session.startAt).toLocaleDateString()} • {
+                                                        user?._id === session.mentorId?._id
+                                                            ? (session.menteeId?.name || 'Mentee')
+                                                            : (session.mentorId?.name || 'Mentor')
+                                                    }
+                                                </p>
+                                            </div>
+                                            <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">
+                                                Completed
+                                            </div>
+                                        </div>
+
+                                        {session.aiSummary && (
+                                            <div className="mt-3 bg-purple-50 p-3 rounded-lg border border-purple-100">
+                                                <div className="flex items-center gap-2 mb-1 text-purple-700 font-bold text-sm">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></svg>
+                                                    AI Summary
+                                                </div>
+                                                <p className="text-gray-700 text-sm leading-relaxed">
+                                                    {session.aiSummary}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-500">No completed sessions yet.</p>
+                        )}
+                    </div>
+
                     <div className="bg-white p-6 rounded-2xl shadow-sm">
                         <h3 className="text-xl font-bold mb-4">Quick Actions</h3>
                         <div className="space-y-4">
