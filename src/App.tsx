@@ -11,6 +11,8 @@ import BookingPage from './pages/BookingPage';
 import SessionPage from './pages/SessionPage';
 import EditProfilePage from './pages/EditProfilePage';
 import LearningPathPage from './pages/LearningPathPage';
+import ChallengesPage from './pages/ChallengesPage';
+import ChallengeDetailsPage from './pages/ChallengeDetailsPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -40,6 +42,8 @@ function App() {
         <Route path="/session/:roomId" element={<SessionPage />} />
         <Route path="/profile/edit" element={<EditProfilePage />} />
         <Route path="/learning-path" element={<LearningPathPage />} />
+        <Route path="/challenges" element={<ChallengesPage />} />
+        <Route path="/challenges/:id" element={<ChallengeDetailsPage />} />
         <Route path="/admin" element={<AdminDashboardPage />} />
       </Route>
     </Routes>

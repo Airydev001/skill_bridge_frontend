@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '../api/client';
-import { BookOpen, CheckCircle, Circle, Lock, Unlock, Calendar, Briefcase, ChevronRight, ChevronDown, Loader2 } from 'lucide-react';
+import { BookOpen, CheckCircle, Circle, Unlock, Calendar, Briefcase, Loader2 } from 'lucide-react';
 
 const LearningPathPage = () => {
     const [field, setField] = useState('');
