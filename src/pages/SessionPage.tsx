@@ -65,7 +65,7 @@ const SessionPage = () => {
         if (!partnerId) return;
 
         // Use VITE_API_URL or default to localhost:4000 (backend port)
-        const socketUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const socketUrl = import.meta.env.VITE_API_URL || 'https://skill-bridge-backend-current.onrender.com/api';
         console.log("Connecting to socket at:", socketUrl);
         socketRef.current = io(socketUrl.replace('/api', '')); // Remove /api if present for socket root
 
@@ -409,7 +409,7 @@ const SessionPage = () => {
 
             {/* Chat Sidebar */}
             {showChat && (
-                <div className="absolute inset-0 md:static md:w-80 h-full bg-neutral-charcoal z-50 md:z-auto border-l border-white/10 flex flex-col">
+                <div className="absolute inset-0 md:static md:w-80 h-full bg-neutral-charcoal z-40 md:z-auto border-l border-white/10 flex flex-col">
                     <div className="md:hidden p-4 bg-gray-900 flex justify-between items-center border-b border-white/10">
                         <h3 className="text-white font-bold">Chat</h3>
                         <button onClick={() => setShowChat(false)} className="text-gray-400 hover:text-white">
@@ -423,6 +423,24 @@ const SessionPage = () => {
                             userId={user?._id || ''}
                             userName={user?.name || 'User'}
                         />
+                    </div>
+                </div>
+            )}
+
+            {/* Whiteboard Overlay - Moved to Root for Z-Index Priority */}
+            {showWhiteboard && (
+                <div className="absolute inset-4 md:inset-8 z-50 bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
+                    <div className="bg-gray-100 p-2 flex justify-between items-center border-b">
+                        <h3 className="font-bold text-gray-700 px-2">Shared Whiteboard</h3>
+                        <button
+                            onClick={() => setShowWhiteboard(false)}
+                            className="p-1 hover:bg-gray-200 rounded-full"
+                        >
+                            <X className="w-5 h-5 text-gray-500" />
+                        </button>
+                    </div>
+                    <div className="flex-1 relative">
+                        <Whiteboard socket={socketRef.current} roomId={roomId || ''} />
                     </div>
                 </div>
             )}
