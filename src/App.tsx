@@ -10,6 +10,7 @@ import MentorDiscoveryPage from './pages/MentorDiscoveryPage';
 import BookingPage from './pages/BookingPage';
 import SessionPage from './pages/SessionPage';
 import EditProfilePage from './pages/EditProfilePage';
+import LearningPathPage from './pages/LearningPathPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
@@ -38,6 +39,7 @@ function App() {
         <Route path="/book/:mentorId" element={<BookingPage />} />
         <Route path="/session/:roomId" element={<SessionPage />} />
         <Route path="/profile/edit" element={<EditProfilePage />} />
+        <Route path="/learning-path" element={<LearningPathPage />} />
         <Route path="/admin" element={<AdminDashboardPage />} />
       </Route>
     </Routes>
