@@ -157,7 +157,7 @@ const DashboardPage = () => {
                                             </div>
                                         </div>
 
-                                        {session.aiSummary && (
+                                        {session.aiSummary ? (
                                             <div className="mt-3 bg-purple-50 p-3 rounded-lg border border-purple-100">
                                                 <div className="flex items-center gap-2 mb-1 text-purple-700 font-bold text-sm">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-sparkles"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /></svg>
@@ -166,6 +166,24 @@ const DashboardPage = () => {
                                                 <p className="text-gray-700 text-sm leading-relaxed">
                                                     {session.aiSummary}
                                                 </p>
+                                            </div>
+                                        ) : (
+                                            <div className="mt-3">
+                                                <button
+                                                    onClick={async () => {
+                                                        try {
+                                                            const res = await api.post(`/sessions/${session._id}/analyze`);
+                                                            alert('Summary generated! Refreshing...');
+                                                            window.location.reload();
+                                                        } catch (err: any) {
+                                                            alert('Failed to generate summary: ' + (err.response?.data?.message || err.message));
+                                                        }
+                                                    }}
+                                                    className="text-sm text-purple-600 font-semibold hover:underline flex items-center gap-1"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-refresh-cw"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" /><path d="M21 3v5h-5" /><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" /><path d="M8 16H3v5" /></svg>
+                                                    Generate AI Summary
+                                                </button>
                                             </div>
                                         )}
 
