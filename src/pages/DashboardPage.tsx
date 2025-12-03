@@ -64,7 +64,7 @@ const DashboardPage = () => {
                                 <p className="text-sm text-gray-500">Total Hours</p>
                                 <p className="text-2xl font-bold text-neutral-charcoal">
                                     {/* Calculate based on total completed sessions from backend */}
-                                    {(pagination.total || 0) * 0.3}
+                                    {((pagination.total || 0) * 0.3).toFixed(2)}
                                 </p>
                             </div>
                         </div>
