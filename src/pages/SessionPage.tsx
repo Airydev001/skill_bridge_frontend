@@ -362,8 +362,8 @@ const SessionPage = () => {
                 <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-white flex items-center gap-4 border border-white/10">
                     <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-red-400" />
-                        <span className={`font-mono font-bold ${timeLeft < 300 ? 'text-red-500 animate-pulse' : ''}`}>
-                            {formatTime(timeLeft)}
+                        <span className={`font-mono font-bold ${timeLeft !== null && timeLeft < 300 ? 'text-red-500 animate-pulse' : ''}`}>
+                            {timeLeft !== null ? formatTime(timeLeft) : 'Waiting...'}
                         </span>
                     </div>
                     <div className="w-px h-4 bg-white/20"></div>
