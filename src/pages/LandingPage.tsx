@@ -67,10 +67,10 @@ const LandingPage = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400"
+                    className="text-4xl md:text-6xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400"
                 >
-                    Master Your Craft with <br />
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500">AI & Mentorship</span>
+                    Millions of young women globally want to enter tech, <br />
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-500">but lack mentorship.</span>
                 </motion.h1>
 
                 <motion.p
@@ -79,7 +79,7 @@ const LandingPage = () => {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-xl text-gray-400 max-w-2xl mb-10 leading-relaxed"
                 >
-                    Connect with expert mentors, generate personalized learning paths with AI, and solve real-world coding challenges. Your journey to mastery starts here.
+                    SkillBridge connects them to micro-mentorship instantly using AI.
                 </motion.p>
 
                 <motion.div
