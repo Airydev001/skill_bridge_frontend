@@ -223,12 +223,15 @@ const LearningPathPage = () => {
                                     {learningPath.skillTree.map((node: any) => (
                                         <div key={node.id} className="relative">
                                             <div className={`absolute -left-[21px] top-1 w-4 h-4 rounded-full border-2 ${node.isCompleted ? 'bg-green-500 border-green-500' : node.isUnlocked ? 'bg-white border-blue-500' : 'bg-gray-200 border-gray-300'}`} />
-                                            <div className={`p-3 rounded-lg border ${node.isCompleted ? 'bg-green-50 border-green-200' : node.isUnlocked ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200'}`}>
+                                            <button
+                                                onClick={() => handleTopicClick(node.label)}
+                                                className={`w-full text-left p-3 rounded-lg border transition-all hover:shadow-md ${node.isCompleted ? 'bg-green-50 border-green-200 hover:bg-green-100' : node.isUnlocked ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'}`}
+                                            >
                                                 <h4 className={`font-bold ${node.isCompleted ? 'text-green-800' : node.isUnlocked ? 'text-blue-800' : 'text-gray-500'}`}>{node.label}</h4>
                                                 {node.children.length > 0 && (
                                                     <p className="text-xs text-gray-500 mt-1">Unlocks: {node.children.join(', ')}</p>
                                                 )}
-                                            </div>
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
