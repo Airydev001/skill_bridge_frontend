@@ -172,7 +172,7 @@ const DashboardPage = () => {
                                                 <button
                                                     onClick={async () => {
                                                         try {
-                                                            const res = await api.post(`/sessions/${session._id}/analyze`);
+                                                            await api.post(`/sessions/${session._id}/analyze`);
                                                             alert('Summary generated! Refreshing...');
                                                             window.location.reload();
                                                         } catch (err: any) {
