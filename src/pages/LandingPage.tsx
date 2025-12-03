@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Users, Code, Zap, BookOpen, Target } from 'lucide-react';
+import { ArrowRight, Sparkles, Users, Code, Zap, BookOpen } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const LandingPage = () => {
