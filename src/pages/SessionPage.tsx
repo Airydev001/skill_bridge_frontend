@@ -168,20 +168,53 @@ const SessionPage = () => {
     }, [localStream, remoteStream, localScreenStream, isScreenSharing]);
 
 
-    // Timer Logic
+    // Timer Logic - Synced with Server
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft((prev) => {
-                if (prev <= 0) {
-                    clearInterval(timer);
-                    alert("Session time is up!");
-                    return 0;
+        let interval: any;
+
+        const checkTimer = async () => {
+            if (!roomId || !user) return;
+
+            try {
+                // If connected and not started, try to start (idempotent)
+                if (connectionStatus === 'connected') {
+                    await api.post(`/sessions/${roomId}/start`);
                 }
-                return prev - 1;
-            });
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
+
+                // Fetch latest session state to get activeStartedAt
+                const res = await api.get(`/sessions/${roomId}`);
+                const session = res.data;
+
+                if (session.activeStartedAt) {
+                    const startTime = new Date(session.activeStartedAt).getTime();
+                    const endTime = startTime + 20 * 60 * 1000; // 20 minutes
+                    const now = Date.now();
+                    const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+
+                    setTimeLeft(remaining);
+
+                    if (remaining <= 0) {
+                        clearInterval(interval);
+                        alert("Session time is up!");
+                        endCall();
+                    }
+                } else {
+                    // Not started yet
+                    setTimeLeft(20 * 60); // Reset to full time
+                }
+            } catch (err) {
+                console.error("Error syncing timer:", err);
+            }
+        };
+
+        // Check immediately and then every 5 seconds
+        if (connectionStatus === 'connected') {
+            checkTimer();
+            interval = setInterval(checkTimer, 5000);
+        }
+
+        return () => clearInterval(interval);
+    }, [roomId, user, connectionStatus]);
 
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
@@ -329,7 +362,7 @@ const SessionPage = () => {
                     <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-red-400" />
                         <span className={`font-mono font-bold ${timeLeft < 300 ? 'text-red-500 animate-pulse' : ''}`}>
-                            {formatTime(timeLeft)}
+                            {timeLeft === 1200 && connectionStatus !== 'connected' ? 'Waiting...' : formatTime(timeLeft)}
                         </span>
                     </div>
                     <div className="w-px h-4 bg-white/20"></div>
