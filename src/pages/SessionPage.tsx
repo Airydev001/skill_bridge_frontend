@@ -37,7 +37,7 @@ const SessionPage = () => {
     const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
 
     // Timer State
-    const [timeLeft, setTimeLeft] = useState(20 * 60);
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
     // Notes State
     const [showNotes, setShowNotes] = useState(false);
@@ -168,6 +168,7 @@ const SessionPage = () => {
     }, [localStream, remoteStream, localScreenStream, isScreenSharing]);
 
 
+    // Timer Logic
     // Timer Logic - Synced with Server
     useEffect(() => {
         let interval: any;
@@ -200,7 +201,7 @@ const SessionPage = () => {
                     }
                 } else {
                     // Not started yet
-                    setTimeLeft(20 * 60); // Reset to full time
+                    setTimeLeft(null);
                 }
             } catch (err) {
                 console.error("Error syncing timer:", err);
@@ -362,7 +363,7 @@ const SessionPage = () => {
                     <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4 text-red-400" />
                         <span className={`font-mono font-bold ${timeLeft < 300 ? 'text-red-500 animate-pulse' : ''}`}>
-                            {timeLeft === 1200 && connectionStatus !== 'connected' ? 'Waiting...' : formatTime(timeLeft)}
+                            {formatTime(timeLeft)}
                         </span>
                     </div>
                     <div className="w-px h-4 bg-white/20"></div>

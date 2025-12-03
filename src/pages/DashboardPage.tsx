@@ -252,6 +252,15 @@ const DashboardPage = () => {
                             <Link to="/mentors" className="block w-full bg-primary text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90">
                                 Find a Mentor
                             </Link>
+                            <Link to="/learning-path" className="block w-full bg-blue-600 text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90">
+                                Learning Path
+                            </Link>
+                            <Link to="/challenges" className="block w-full bg-purple-600 text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90">
+                                Coding Challenges
+                            </Link>
+                            <Link to="/admin" className="block w-full bg-gray-800 text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90">
+                                Admin Dashboard
+                            </Link>
                             <button
                                 onClick={() => navigate('/profile/edit')}
                                 className="block w-full border border-gray-300 text-gray-700 text-center py-3 rounded-xl font-bold hover:bg-gray-50"
