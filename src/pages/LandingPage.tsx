@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Users, Code, Zap, BookOpen } from 'lucide-react';
+import { ArrowRight, Users, Code, Zap, BookOpen } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const LandingPage = () => {
@@ -61,15 +61,7 @@ const LandingPage = () => {
 
             {/* Hero Section */}
             <main className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32 flex flex-col items-center text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8"
-                >
-                    <Sparkles className="w-4 h-4 text-yellow-400" />
-                    <span className="text-sm font-medium text-gray-300">AI-Powered Mentorship Platform</span>
-                </motion.div>
+
 
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
