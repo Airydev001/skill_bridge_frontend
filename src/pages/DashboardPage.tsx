@@ -1,27 +1,38 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/client';
-import { Calendar, Clock, Trophy, Award } from 'lucide-react';
+import { Calendar, Clock, Trophy, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const DashboardPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [page, setPage] = useState(1);
+    const limit = 5;
 
-    const { data: sessions, isLoading } = useQuery({
-        queryKey: ['sessions'],
+    // Fetch Upcoming Sessions (Scheduled)
+    const { data: upcomingData, isLoading: isLoadingUpcoming } = useQuery({
+        queryKey: ['sessions', 'upcoming'],
         queryFn: async () => {
-            const res = await api.get('/sessions');
-            console.log('Raw sessions data:', res.data);
-            return res.data;
+            const res = await api.get('/sessions?status=scheduled&limit=100'); // Get all upcoming
+            return res.data; // Expecting { sessions: [], pagination: {} }
         }
     });
 
-    const upcomingSessions = sessions?.filter((s: any) => {
-        const isScheduled = s.status === 'scheduled';
-        const isNotExpired = new Date(s.endAt) > new Date();
-        return isScheduled && isNotExpired;
-    }) || [];
+    // Fetch Past Sessions (Completed) with Pagination
+    const { data: pastData, isLoading: isLoadingPast } = useQuery({
+        queryKey: ['sessions', 'past', page],
+        queryFn: async () => {
+            const res = await api.get(`/sessions?status=completed&page=${page}&limit=${limit}`);
+            return res.data;
+        },
+        placeholderData: (previousData) => previousData // Keep previous data while fetching new
+    });
+
+    const upcomingSessions = upcomingData?.sessions || [];
+    const pastSessions = pastData?.sessions || [];
+    const pagination = pastData?.pagination || { total: 0, page: 1, pages: 1 };
 
     return (
         <div className="min-h-screen bg-neutral-softGray">
@@ -52,8 +63,8 @@ const DashboardPage = () => {
                             <div>
                                 <p className="text-sm text-gray-500">Total Hours</p>
                                 <p className="text-2xl font-bold text-neutral-charcoal">
-                                    {/* Mock calculation */}
-                                    {(sessions?.filter((s: any) => s.status === 'completed').length || 0) * 0.3}
+                                    {/* Calculate based on total completed sessions from backend */}
+                                    {(pagination.total || 0) * 0.3}
                                 </p>
                             </div>
                         </div>
@@ -102,7 +113,7 @@ const DashboardPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-2xl shadow-sm md:col-span-2">
                         <h3 className="text-xl font-bold mb-4">Upcoming Sessions</h3>
-                        {isLoading ? (
+                        {isLoadingUpcoming ? (
                             <div>Loading sessions...</div>
                         ) : upcomingSessions.length > 0 ? (
                             <div className="space-y-4">
@@ -136,10 +147,18 @@ const DashboardPage = () => {
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm md:col-span-2">
-                        <h3 className="text-xl font-bold mb-4">Past Sessions</h3>
-                        {sessions?.filter((s: any) => s.status === 'completed').length > 0 ? (
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-xl font-bold">Past Sessions</h3>
+                            <span className="text-sm text-gray-500">
+                                Page {pagination.page} of {pagination.pages}
+                            </span>
+                        </div>
+
+                        {isLoadingPast ? (
+                            <div>Loading history...</div>
+                        ) : pastSessions.length > 0 ? (
                             <div className="space-y-4">
-                                {sessions.filter((s: any) => s.status === 'completed').map((session: any) => (
+                                {pastSessions.map((session: any) => (
                                     <div key={session._id} className="border p-4 rounded-xl">
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
@@ -200,6 +219,27 @@ const DashboardPage = () => {
                                         )}
                                     </div>
                                 ))}
+
+                                {/* Pagination Controls */}
+                                <div className="flex justify-center items-center gap-4 mt-6">
+                                    <button
+                                        onClick={() => setPage(p => Math.max(1, p - 1))}
+                                        disabled={page === 1}
+                                        className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronLeft className="w-5 h-5" />
+                                    </button>
+                                    <span className="font-medium text-gray-700">
+                                        Page {page}
+                                    </span>
+                                    <button
+                                        onClick={() => setPage(p => (pagination.pages > p ? p + 1 : p))}
+                                        disabled={page >= pagination.pages}
+                                        className="p-2 rounded-full hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronRight className="w-5 h-5" />
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             <p className="text-gray-500">No completed sessions yet.</p>
