@@ -307,7 +307,12 @@ const SessionPage = () => {
         }
     };
 
-    const endCall = () => {
+    const endCall = async () => {
+        try {
+            await api.patch(`/sessions/${roomId}`, { status: 'completed' });
+        } catch (err) {
+            console.error("Failed to mark session as completed", err);
+        }
         socketRef.current?.disconnect();
         localStream?.getTracks().forEach(track => track.stop());
         localScreenStream?.getTracks().forEach(track => track.stop());
