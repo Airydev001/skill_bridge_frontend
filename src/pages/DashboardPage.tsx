@@ -258,6 +258,10 @@ const DashboardPage = () => {
                             <Link to="/challenges" className="block w-full bg-purple-600 text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90">
                                 Coding Challenges
                             </Link>
+                            <Link to="/matches" className="block w-full bg-teal-600 text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90 flex items-center justify-center gap-2">
+                                <Trophy className="w-5 h-5" />
+                                AI Smart Match
+                            </Link>
                             {user?.role === 'admin' && (
                                 <Link to="/admin" className="block w-full bg-gray-800 text-white text-center py-3 rounded-xl font-bold hover:bg-opacity-90">
                                     Admin Dashboard
