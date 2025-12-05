@@ -3,9 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import io, { Socket } from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/client';
-import { Mic, MicOff, Camera, CameraOff, Monitor, PhoneOff, MessageSquare, Clock, PenTool, X, FileText } from 'lucide-react';
+import { Mic, MicOff, Camera, CameraOff, Monitor, PhoneOff, MessageSquare, Clock, PenTool, X, FileText, AlertTriangle, ShieldCheck } from 'lucide-react';
 import ChatSidebar from '../components/ChatSidebar';
 import Whiteboard from '../components/Whiteboard';
+import ReportModal from '../components/ReportModal';
 
 const SessionPage = () => {
     const { roomId } = useParams();
@@ -43,6 +44,10 @@ const SessionPage = () => {
     const [showNotes, setShowNotes] = useState(false);
     const [notes, setNotes] = useState('');
     const [isSavingNotes, setIsSavingNotes] = useState(false);
+
+    // Safety State
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [showSafetyGuidelines, setShowSafetyGuidelines] = useState(true);
 
     // Auto-save Notes
     useEffect(() => {
@@ -471,6 +476,14 @@ const SessionPage = () => {
                         <MessageSquare className="w-5 h-5 md:w-6 md:h-6" />
                     </button>
 
+                    <button
+                        onClick={() => setShowReportModal(true)}
+                        className="p-3 md:p-4 rounded-full bg-gray-700 hover:bg-red-900/50 text-white hover:text-red-400 transition-all"
+                        title="Report Issue"
+                    >
+                        <AlertTriangle className="w-5 h-5 md:w-6 md:h-6" />
+                    </button>
+
                     <div className="w-px h-8 md:h-10 bg-white/10 mx-1 md:mx-2" />
 
                     <button
@@ -542,6 +555,52 @@ const SessionPage = () => {
                     </div>
                     <div className="flex-1 relative">
                         <Whiteboard socket={socketRef.current} roomId={roomId || ''} />
+                    </div>
+                </div>
+            )}
+            {/* Report Modal */}
+            <ReportModal
+                isOpen={showReportModal}
+                onClose={() => setShowReportModal(false)}
+                reportedUserId={partnerId || ''}
+                reportedUserName="User"
+            />
+
+            {/* Safety Guidelines Modal (On Join) */}
+            {showSafetyGuidelines && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl animate-in fade-in zoom-in duration-300">
+                        <div className="flex items-center gap-3 mb-4 text-primary">
+                            <ShieldCheck className="w-8 h-8" />
+                            <h2 className="text-2xl font-bold text-gray-900">Community Safety</h2>
+                        </div>
+                        <p className="text-gray-600 mb-6 leading-relaxed">
+                            Welcome to your mentorship session! To ensure a safe and positive experience for everyone, please remember:
+                        </p>
+                        <ul className="space-y-3 mb-8">
+                            <li className="flex items-start gap-3">
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                                <span className="text-gray-700">Be respectful and professional at all times.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                                <span className="text-gray-700">Do not share personal contact info (phone, address) immediately.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                                <span className="text-gray-700">Harassment or inappropriate behavior will result in an immediate ban.</span>
+                            </li>
+                            <li className="flex items-start gap-3">
+                                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2" />
+                                <span className="text-gray-700">You can report any issues using the <AlertTriangle className="w-4 h-4 inline text-red-500 mx-1" /> button.</span>
+                            </li>
+                        </ul>
+                        <button
+                            onClick={() => setShowSafetyGuidelines(false)}
+                            className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition-all"
+                        >
+                            I Understand & Agree
+                        </button>
                     </div>
                 </div>
             )}
