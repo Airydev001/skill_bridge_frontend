@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../api/client';
-import { Loader2, Sparkles, User, Briefcase, BookOpen, Clock } from 'lucide-react';
+import { Loader2, Sparkles, User } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const MatchPage = () => {
