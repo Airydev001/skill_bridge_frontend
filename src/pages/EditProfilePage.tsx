@@ -33,6 +33,7 @@ const EditProfilePage = () => {
                         setValue('interests', userData.profile.interests.join(', '));
                         setValue('skillLevel', userData.profile.skillLevel);
                         setValue('learningGoals', userData.profile.learningGoals.join(', '));
+                        setValue('preferredTimes', userData.profile.preferredTimes?.join(', ') || '');
                     }
                 }
             } catch (err) {
@@ -64,6 +65,7 @@ const EditProfilePage = () => {
                 payload.interests = data.interests.split(',').map((s: string) => s.trim());
                 payload.skillLevel = data.skillLevel;
                 payload.learningGoals = data.learningGoals.split(',').map((s: string) => s.trim());
+                payload.preferredTimes = data.preferredTimes.split(',').map((s: string) => s.trim());
             }
 
             const res = await api.put('/users/profile', payload);
@@ -147,6 +149,10 @@ const EditProfilePage = () => {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Learning Goals</label>
                                 <textarea {...register('learningGoals')} className="w-full p-2 border rounded-lg" rows={3} />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Times (comma separated)</label>
+                                <input {...register('preferredTimes')} className="w-full p-2 border rounded-lg" placeholder="e.g. Weekends, Evenings" />
                             </div>
                         </>
                     )}
