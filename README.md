@@ -23,6 +23,6 @@ cd skill_bridge_frontend
 
 2. npm install
 
-3. VITE_API_URL=https://your-backend-url.com set this .env
+3. VITE_API_URL=https://skill-bridge-backend-current.onrender.com/api
 
 4. npm run dev
