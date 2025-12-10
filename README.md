@@ -18,8 +18,8 @@ It interacts with the backend API hosted [here](https://github.com/your-username
 
 ### 1. Clone Repo
 ```bash
-git clone https://github.com/your-username/skillbridge-frontend.git
-cd skillbridge-frontend
+git clone https://github.com/Airydev001/skill_bridge_frontend.git
+cd skill_bridge_frontend
 
 2. npm install
 
