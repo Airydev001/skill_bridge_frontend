@@ -1,7 +1,7 @@
 # SkillBridge Frontend
 
 This is the **React frontend** for SkillBridge — a micro-mentorship platform for young women in tech.  
-It interacts with the backend API hosted [here](https://github.com/your-username/skillbridge-backend).
+It interacts with the backend API hosted https://github.com/Airydev001/skill_bridge_backend.git
 
 ---
 
