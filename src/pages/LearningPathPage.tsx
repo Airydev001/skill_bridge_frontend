@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const LearningPathPage = () => {
     const [field, setField] = useState('');
+    const [months, setMonths] = useState<number>(3);
     const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
     const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
     const [resources, setResources] = useState<any>(null);
@@ -17,7 +18,9 @@ const LearningPathPage = () => {
         queryFn: async () => {
             try {
                 const res = await api.get('/learning-paths');
+                      console.log("Fetched learning path:", res.data);
                 return res.data;
+                //console.log("Fetched learning path:", res.data);
             } catch (err) {
                 return null; // No path found
             }
@@ -25,10 +28,11 @@ const LearningPathPage = () => {
         retry: false
     });
 
-    // Generate new path mutation
+    // Generate new path mutation (accepts field & months)
     const generatePathMutation = useMutation({
-        mutationFn: async (field: string) => {
-            const res = await api.post('/learning-paths', { field });
+        mutationFn: async ({ field, months }: { field: string; months: number }) => {
+            const res = await api.post('/learning-paths', { field, months });
+            console.log(res.data);
             return res.data;
         },
         onSuccess: (data) => {
@@ -62,7 +66,7 @@ const LearningPathPage = () => {
     const handleGenerate = (e: React.FormEvent) => {
         e.preventDefault();
         if (field.trim()) {
-            generatePathMutation.mutate(field);
+            generatePathMutation.mutate({ field, months });
         }
     };
 
@@ -82,6 +86,9 @@ const LearningPathPage = () => {
     }
 
     const currentWeek = learningPath?.weeklyPlan[currentWeekIndex];
+    const totalWeeks = learningPath?.weeklyPlan.length ?? 0;
+    const monthsCount = totalWeeks > 0 ? Math.ceil(totalWeeks / 4) : 0;
+    const currentMonthIndex = Math.floor(currentWeekIndex / 4);
 
     return (
         <div className="min-h-screen bg-neutral-softGray p-8 relative">
@@ -109,7 +116,7 @@ const LearningPathPage = () => {
                         <BookOpen className="w-16 h-16 text-primary mx-auto mb-4" />
                         <h2 className="text-2xl font-bold mb-4">Start Your Journey</h2>
                         <p className="text-gray-600 mb-6">Enter a field you want to master (e.g., "Full Stack Development", "Data Science") and we'll generate a complete roadmap for you.</p>
-                        <form onSubmit={handleGenerate} className="flex gap-4">
+                        <form onSubmit={handleGenerate} className="flex gap-4 items-center">
                             <input
                                 type="text"
                                 value={field}
@@ -117,6 +124,17 @@ const LearningPathPage = () => {
                                 placeholder="Enter a field..."
                                 className="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                             />
+                            <div className="flex items-center gap-2">
+                                <label className="text-sm text-gray-600">Months</label>
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={12}
+                                    value={months}
+                                    onChange={(e) => setMonths(Number(e.target.value))}
+                                    className="w-20 px-3 py-2 rounded-xl border border-gray-300 outline-none"
+                                />
+                            </div>
                             <button
                                 type="submit"
                                 disabled={!field.trim()}
@@ -156,6 +174,8 @@ const LearningPathPage = () => {
                                         </button>
                                         <span className="font-medium text-gray-700 px-2">
                                             Week {currentWeekIndex + 1} of {learningPath.weeklyPlan.length}
+                                            <span className="mx-2">•</span>
+                                            Month {currentMonthIndex + 1} of {monthsCount}
                                         </span>
                                         <button
                                             onClick={() => setCurrentWeekIndex(prev => Math.min(learningPath.weeklyPlan.length - 1, prev + 1))}
