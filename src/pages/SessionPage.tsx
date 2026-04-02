@@ -386,6 +386,7 @@ const SessionPage = () => {
                             playsInline
                             autoPlay
                             ref={mainVideoRef}
+                            aria-label="Main session video"
                             className="w-full h-full object-cover"
                         />
 
@@ -403,6 +404,7 @@ const SessionPage = () => {
                                 autoPlay
                                 muted
                                 ref={pipVideoRef}
+                                aria-label="Your camera preview"
                                 className={`w-full h-full object-cover ${isVideoOff ? 'hidden' : ''}`}
                             />
                             {isVideoOff && (
@@ -436,61 +438,69 @@ const SessionPage = () => {
                 <div className="h-16 md:h-20 bg-gray-900/90 backdrop-blur border-t border-white/10 flex items-center justify-center gap-2 md:gap-4 px-4 md:px-8 overflow-x-auto">
                     <button
                         onClick={toggleAudio}
-                        className={`p-3 md:p-4 rounded-full transition-all ${isAudioMuted ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        aria-label={isAudioMuted ? 'Unmute audio' : 'Mute audio'}
+                        className={`p-3 md:p-4 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-primary ${isAudioMuted ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        {isAudioMuted ? <MicOff className="w-5 h-5 md:w-6 md:h-6" /> : <Mic className="w-5 h-5 md:w-6 md:h-6" />}
+                        {isAudioMuted ? <MicOff className="w-5 h-5 md:w-6 md:h-6" aria-hidden /> : <Mic className="w-5 h-5 md:w-6 md:h-6" aria-hidden />}
                     </button>
 
                     <button
                         onClick={toggleVideo}
-                        className={`p-3 md:p-4 rounded-full transition-all ${isVideoOff ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        aria-label={isVideoOff ? 'Turn video on' : 'Turn video off'}
+                        className={`p-3 md:p-4 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-primary ${isVideoOff ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        {isVideoOff ? <CameraOff className="w-5 h-5 md:w-6 md:h-6" /> : <Camera className="w-5 h-5 md:w-6 md:h-6" />}
+                        {isVideoOff ? <CameraOff className="w-5 h-5 md:w-6 md:h-6" aria-hidden /> : <Camera className="w-5 h-5 md:w-6 md:h-6" aria-hidden />}
                     </button>
 
                     <button
                         onClick={shareScreen}
-                        className={`p-3 md:p-4 rounded-full transition-all ${isScreenSharing ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        aria-label={isScreenSharing ? 'Stop screen share' : 'Share screen'}
+                        className={`p-3 md:p-4 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-primary ${isScreenSharing ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        <Monitor className="w-5 h-5 md:w-6 md:h-6" />
+                        <Monitor className="w-5 h-5 md:w-6 md:h-6" aria-hidden />
                     </button>
 
                     <button
                         onClick={() => setShowNotes(!showNotes)}
-                        className={`p-3 md:p-4 rounded-full transition-all ${showNotes ? 'bg-yellow-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        aria-label={showNotes ? 'Hide notes' : 'Show notes'}
+                        className={`p-3 md:p-4 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-primary ${showNotes ? 'bg-yellow-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        <FileText className="w-5 h-5 md:w-6 md:h-6" />
+                        <FileText className="w-5 h-5 md:w-6 md:h-6" aria-hidden />
                     </button>
 
                     <button
                         onClick={() => setShowWhiteboard(!showWhiteboard)}
-                        className={`p-3 md:p-4 rounded-full transition-all ${showWhiteboard ? 'bg-purple-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        aria-label={showWhiteboard ? 'Hide whiteboard' : 'Show whiteboard'}
+                        className={`p-3 md:p-4 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-primary ${showWhiteboard ? 'bg-purple-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        <PenTool className="w-5 h-5 md:w-6 md:h-6" />
+                        <PenTool className="w-5 h-5 md:w-6 md:h-6" aria-hidden />
                     </button>
 
                     <button
                         onClick={() => setShowChat(!showChat)}
-                        className={`p-3 md:p-4 rounded-full transition-all ${showChat ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
+                        aria-label={showChat ? 'Hide chat' : 'Show chat'}
+                        className={`p-3 md:p-4 rounded-full transition-all focus-visible:ring-2 focus-visible:ring-primary ${showChat ? 'bg-blue-500 text-white' : 'bg-gray-700 hover:bg-gray-600 text-white'}`}
                     >
-                        <MessageSquare className="w-5 h-5 md:w-6 md:h-6" />
+                        <MessageSquare className="w-5 h-5 md:w-6 md:h-6" aria-hidden />
                     </button>
 
                     <button
                         onClick={() => setShowReportModal(true)}
-                        className="p-3 md:p-4 rounded-full bg-gray-700 hover:bg-red-900/50 text-white hover:text-red-400 transition-all"
+                        aria-label="Report issue"
+                        className="p-3 md:p-4 rounded-full bg_gray-700 hover:bg-red-900/50 text-white hover:text-red-400 transition-all focus-visible:ring-2 focus-visible:ring-primary"
                         title="Report Issue"
                     >
-                        <AlertTriangle className="w-5 h-5 md:w-6 md:h-6" />
+                        <AlertTriangle className="w-5 h-5 md:w-6 md:h-6" aria-hidden />
                     </button>
 
                     <div className="w-px h-8 md:h-10 bg-white/10 mx-1 md:mx-2" />
 
                     <button
                         onClick={endCall}
-                        className="bg-red-600 text-white px-4 md:px-8 py-2 md:py-3 rounded-full hover:bg-red-700 shadow-lg font-semibold flex items-center gap-2 transition-all hover:scale-105 text-sm md:text-base"
+                        aria-label="End call"
+                        className="bg-red-600 text-white px-4 md:px-8 py-2 md:py-3 rounded-full hover:bg-red-700 shadow-lg font-semibold flex items-center gap-2 transition-all hover:scale-105 text-sm md:text-base focus-visible:ring-2 focus-visible:ring-primary"
                     >
-                        <PhoneOff className="w-4 h-4 md:w-5 md:h-5" />
+                        <PhoneOff className="w-4 h-4 md:w-5 md:h-5" aria-hidden />
                         <span className="hidden md:inline">End Call</span>
                         <span className="md:hidden">End</span>
                     </button>
@@ -502,7 +512,7 @@ const SessionPage = () => {
                 <div className="absolute inset-0 md:static md:w-80 h-full bg-neutral-charcoal z-40 md:z-auto border-l border-white/10 flex flex-col">
                     <div className="md:hidden p-4 bg-gray-900 flex justify-between items-center border-b border-white/10">
                         <h3 className="text-white font-bold">Chat</h3>
-                        <button onClick={() => setShowChat(false)} className="text-gray-400 hover:text-white">
+                        <button onClick={() => setShowChat(false)} aria-label="Close chat" className="text-gray-400 hover:text-white">
                             Close
                         </button>
                     </div>
@@ -532,11 +542,14 @@ const SessionPage = () => {
                             </button>
                         </div>
                     </div>
+                    <label htmlFor="session-notes" className="sr-only">Session notes</label>
                     <textarea
+                        id="session-notes"
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
                         placeholder="Type your notes here... (Auto-saved)"
-                        className="w-full h-64 p-4 resize-none focus:outline-none text-gray-700 text-sm"
+                        aria-label="Session notes"
+                        className="w-full h-64 p-4 resize-none focus:outline-none focus-visible:ring-2 focus-visible:ring-primary text-gray-700 text-sm"
                     />
                 </div>
             )}
@@ -568,11 +581,11 @@ const SessionPage = () => {
 
             {/* Safety Guidelines Modal (On Join) */}
             {showSafetyGuidelines && (
-                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="safety-title">
                     <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl animate-in fade-in zoom-in duration-300">
                         <div className="flex items-center gap-3 mb-4 text-primary">
                             <ShieldCheck className="w-8 h-8" />
-                            <h2 className="text-2xl font-bold text-gray-900">Community Safety</h2>
+                            <h2 id="safety-title" className="text-2xl font-bold text-gray-900">Community Safety</h2>
                         </div>
                         <p className="text-gray-600 mb-6 leading-relaxed">
                             Welcome to your mentorship session! To ensure a safe and positive experience for everyone, please remember:
@@ -597,7 +610,8 @@ const SessionPage = () => {
                         </ul>
                         <button
                             onClick={() => setShowSafetyGuidelines(false)}
-                            className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition-all"
+                            className="w-full bg-primary text-white font-bold py-3 rounded-xl hover:bg-opacity-90 transition-all focus-visible:ring-2 focus-visible:ring-primary"
+                            aria-label="Agree to safety guidelines"
                         >
                             I Understand & Agree
                         </button>
